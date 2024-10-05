@@ -42,7 +42,7 @@ jobs:
       run: |
         echo "Deploying to Amplify using branch: $BRANCH_NAME"
         # Get the Amplify app ID (replace with your actual App ID)
-        AMPLIFY_APP_ID="your_amplify_app_id"
+        # AMPLIFY_APP_ID="your_amplify_app_id"
 
         # Check if branch exists, if not, create it
         aws amplify get-branch --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME || \
