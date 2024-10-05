@@ -38,11 +38,10 @@ jobs:
     - name: Deploy to AWS Amplify
       env:
         BRANCH_NAME: ${{ github.ref_name }} # Extracts the current branch name
-        AMPLIFY_APP_ID: ${{secrets.AWS_AMPLIFY_APP_ID}}
       run: |
         echo "Deploying to Amplify using branch: $BRANCH_NAME"
         # Get the Amplify app ID (replace with your actual App ID)
-        # AMPLIFY_APP_ID="your_amplify_app_id"
+        AMPLIFY_APP_ID="d1bbzf70yqhupw"
 
         # Check if branch exists, if not, create it
         aws amplify get-branch --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME || \
