@@ -1,30 +1,3 @@
-# name: Deploy to AWS Amplify
-#
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - '**' # Trigger on push to all branches
-#
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-#
-#     - name: Configure AWS Credentials
-#       uses: aws-actions/configure-aws-credentials@v1
-#       with:
-#         role-to-assume: arn:aws:iam::975438034705:role/amplify_deploy_role  # Replace with your role ARN
-#         aws-region: us-east-2  # Change to your preferred region
-#
-#     - name: Deploy to Amplify
-#       run: |
-#         amplify start-job --app-id YOUR_AMPLIFY_APP_ID --branch-name $GITHUB_REF_NAME --job-type RELEASE
-#
-
 name: Deploy to AWS Amplify
 
 on:
@@ -38,16 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check Secrets
+      run: |
+        echo "AWS Secret Account: ${{ secrets.AWS_SECRET_ACCOUNT }}"
+        echo "Amplify App ID: ${{ secrets.AMPLIFY_APP_ID }}"
+        
     - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2 # Use the latest version
+      uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::975438034705:role/amplify_deploy_role  # Replace with your role ARN
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_SECRET_ACCOUNT }}:role/amplify_deploy_role
         aws-region: us-east-2  # Change to your preferred region
 
     - name: Deploy to Amplify
       run: |
         amplify start-job --app-id ${{ secrets.AMPLIFY_APP_ID }} --branch-name ${{ github.ref_name }} --job-type RELEASE || exit 1
-
