@@ -22,8 +22,10 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_SECRET_ACCOUNT }}:role/amplify_deploy_role
+        role-to-assume: arn:aws:iam::975438034705:role/amplify_deploy_role
         aws-region: us-east-2  # Change to your preferred region
+        env:
+          AWS_DEBUG: true
 
     - name: Deploy to Amplify
       run: |
