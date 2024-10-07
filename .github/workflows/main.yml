@@ -1,9 +1,10 @@
 name: Deploy to AWS Amplify
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main  # Change this to your desired branch(es)
+      - '**' # Trigger on push to all branches
 
 jobs:
   deploy:
