@@ -17,7 +17,7 @@
 #     - name: Configure AWS Credentials
 #       uses: aws-actions/configure-aws-credentials@v1
 #       with:
-#         role-to-assume: arn:aws:iam::${{ secrets.AWS_SECRET_ACCOUNT }}:role/amplify_deploy_role  # Replace with your role ARN
+#         role-to-assume: arn:aws:iam::975438034705:role/amplify_deploy_role  # Replace with your role ARN
 #         aws-region: us-east-2  # Change to your preferred region
 #
 #     - name: Deploy to Amplify
