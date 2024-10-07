@@ -1,10 +1,9 @@
-name: Deploy React App to AWS Amplify
+name: Deploy to AWS Amplify
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - '**' # Trigger on push to all branches
+      - main  # Change this to your desired branch(es)
 
 jobs:
   deploy:
@@ -12,45 +11,14 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        node-version: '18' # Specify the version of Node.js for your React app
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_SECRET_ACCOUNT }}:role/amplify_deploy_role  # Replace with your role ARN
+        aws-region: us-west-2  # Change to your preferred region
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build React app
-      run: npm run build
-
-    - name: Install AWS CLI
-      run: sudo apt-get install awscli -y
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1 # Change this to your desired AWS region
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_SECRET_ACCOUNT }}:role/amplify_deploy_role
-
-    - name: Deploy to AWS Amplify
-      env:
-        BRANCH_NAME: ${{ github.ref_name }} # Extracts the current branch name
-        AMPLIFY_APP_ID: ${{secrets.AWS_AMPLIFY_APP_ID}}
+    - name: Deploy to Amplify
       run: |
-        echo "Deploying to Amplify using branch: $BRANCH_NAME"
-        # Get the Amplify app ID (replace with your actual App ID)
-        AMPLIFY_APP_ID="d1bbzf70yqhupw"
-
-        # Check if branch exists, if not, create it
-        aws amplify get-branch --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME || \
-        aws amplify create-branch --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME
-
-        # Trigger a new build
-        aws amplify start-job --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME --job-type RELEASE
-
-    - name: Post deploy cleanup (optional)
-      run: echo "Deployment process completed!"
+        amplify start-job --app-id YOUR_AMPLIFY_APP_ID --branch-name $GITHUB_REF_NAME --job-type RELEASE
