@@ -24,9 +24,9 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::975438034705:role/amplify_deploy_role
         aws-region: us-east-2  # Change to your preferred region
-        env:
-          AWS_DEBUG: true
 
     - name: Deploy to Amplify
+      env:
+        AWS_DEBUG: true  # Set the environment variable for debugging
       run: |
         amplify start-job --app-id ${{ secrets.AMPLIFY_APP_ID }} --branch-name ${{ github.ref_name }} --job-type RELEASE || exit 1
